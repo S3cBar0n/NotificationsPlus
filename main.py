@@ -33,27 +33,14 @@ def calendar_checker():
         if today in str(appointment.Start):
             appt_time = appointment.Start.strftime('%m/%d/%Y %H:%M')
             # Calculating if the upcoming appointment has passed the current point in time.
-            if now <= appt_time:
-                # Checks to see if the appointment is going to happen in the next 5-6 minutes.
-                if appt_time < delta.strftime('%m/%d/%Y %H:%M'):
-                    if appointment.ResponseStatus in meeting_types:
-                        print(f"Calendar - {appointment.Subject}")
-                        toaster.show_toast(
-                            f"MEETING STARTING SHORTLY - {meeting_response[str(appointment.ResponseStatus)]}",
-                            f"{appointment.Subject}", duration=15, threaded=True)
-                        # print(appointment.Subject)
-                        # print(appt_time)
-                        # print(appointment.ResponseStatus)
-                        # print(now)
-                        # print()
-                    else:
-                        pass
-                else:
-                    pass
-            else:
-                pass
-        else:
-            pass
+            if (
+                    now <= appt_time < delta.strftime('%m/%d/%Y %H:%M')
+                    and appointment.ResponseStatus in meeting_types
+            ):
+                print(f"Calendar - {appointment.Subject}")
+                toaster.show_toast(
+                    f"MEETING STARTING SHORTLY - {meeting_response[str(appointment.ResponseStatus)]}",
+                    f"{appointment.Subject}", duration=15, threaded=True)
 
 
 # Loop for our thread that is getting started in main.
@@ -90,11 +77,6 @@ def email_checker():
                 if msg.UnRead is True:
                     unread_msg.append(f"{msg.SenderName} about {msg.Subject}")
                     print(f"Email - {msg.SenderName} - {msg.Subject}")
-                else:
-                    pass
-        else:
-            pass
-
         messages = subfolder.Items
         for msg in messages:
             if msg.UnRead is True:
@@ -105,8 +87,6 @@ def email_checker():
         toaster.show_toast(f"Unread Message!!!", f"{unread_msg[0]}", duration=15, threaded=True)
     elif len(unread_msg) > 1:
         toaster.show_toast(f"{len(unread_msg)} Unread Messages!!!", '\n'.join(unread_msg), duration=15, threaded=True)
-    else:
-        pass
 
 
 # Loop for our thread that is getting started in main.
